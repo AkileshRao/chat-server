@@ -11,31 +11,23 @@ app.use(cors())
 io.on('connection', (socket) => {
     socket.on('login', ({ name, room }, callback) => {
         const { user, error } = addUser(socket.id, name, room)
-        console.log(getUsers());
-        console.log("From login", socket.id);
         if (error) return callback(error)
-        socket.join(room)
-        console.log(room, name);
-        io.to(room).emit('notification', `${name} has joined ${room}`)
+        socket.join(user.room)
+        io.in(room).emit('notification', `${name} has joined ${room} again`)
+        console.log(`${name} has joined ${room}`);
         callback()
     })
 
-    socket.on('chat', msg => {
-        io.emit('chat', msg)
-    })
-
     socket.on('sendMessage', message => {
-        console.log("From send", socket.id);
         const user = getUser(socket.id)
         io.to(user.room).emit('message', { user: user.name, text: message });
+        console.log();
     })
 
     socket.on("disconnect", () => {
+        console.log('User disconnected');
         deleteUser(socket.id)
-        console.log("User disconnected");
     })
-
-
 })
 
 app.get('/', (req, res) => {
