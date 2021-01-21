@@ -14,13 +14,15 @@ io.on('connection', (socket) => {
         if (error) return callback(error)
         socket.join(user.room)
         io.in(room).emit('notification', `${name} has joined ${room} again`)
+        io.in(room).emit('users', getUsers())
         console.log(`${name} has joined ${room}`);
+        console.log(`Users in the room => ${getUsers()}`);
         callback()
     })
 
     socket.on('sendMessage', message => {
         const user = getUser(socket.id)
-        io.to(user.room).emit('message', { user: user.name, text: message });
+        io.in(user.room).emit('message', { user: user.name, text: message });
         console.log();
     })
 

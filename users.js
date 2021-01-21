@@ -15,6 +15,7 @@ const addUser = (id, name, room) => {
 
 const getUser = id => {
     let user = users.find(user => user.id == id)
+    console.log(users);
     return user
 }
 
