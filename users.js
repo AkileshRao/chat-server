@@ -15,7 +15,6 @@ const addUser = (id, name, room) => {
 
 const getUser = id => {
     let user = users.find(user => user.id == id)
-    console.log(users);
     return user
 }
 
@@ -24,6 +23,6 @@ const deleteUser = (id) => {
     if (index !== -1) return users.splice(index, 1)[0];
 }
 
-const getUsers = () => users
+const getUsers = (room) => users.filter(user => user.room === room)
 
 module.exports = { addUser, getUser, deleteUser, getUsers }
